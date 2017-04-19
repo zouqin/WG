@@ -1,0 +1,2 @@
+css-loader : webpack 加载css文件
+style-loader : webpack 将css文件加载到<style>标签中
