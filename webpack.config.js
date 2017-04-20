@@ -1,8 +1,12 @@
-var path = require("path");
-var webpack = require('webpack');
+var path = require("path");           //node path 模块
+var webpack = require('webpack');     //webpack   核心模块
 
 module.exports = {
-  entry: ['./app/test'],
+  /**
+   * entry:入口文件
+   * @type {Array | String | Object}
+   */
+  entry: ['./app/entry.js'],
   output: {
     path: path.resolve(__dirname, "build"),
     filename: '[name].js'
@@ -10,14 +14,24 @@ module.exports = {
   module: {
     loaders: [
     	/** 将css文件加载到<style>标签中 **/
-      {test: /\.css$/, loader: 'style'},	
+        {test: /\.css$/, loader: 'style'},	
       
-      /**支持JS中以  requier() 的形式加载 .css文件**/
-      {test: /\.css$/, loader: 'css'},		
+        /**支持JS中以  requier() 的形式加载 .css文件**/
+        {test: /\.css$/, loader: 'css'},		
       
-      /**支持JS,CSS中引入图片  limit:属性小于10000字节时采用图片64位编码 **/
-      {test: /\.(png|jpg)$/,loader:'url?limit=1000'}
+        /**支持JS,CSS中引入图片  limit:属性小于10000字节时采用图片64位编码 **/
+        {test: /\.(png|jpg)$/,loader:'url?limit=1000'},
+        
+        /**解析 react和 es6 **/
+        {test: /\.js?$/, loader: 'babel', query: { presets: ['es2015', 'react'] } }
     ]
+  },
+
+  /**
+   * 配置解析规则
+   */
+  resolve: {
+      extensions: ['', '.js', '.jsx']
   },
   
   /**插件**/
@@ -27,14 +41,11 @@ module.exports = {
 		 */
 		new webpack.optimize.UglifyJsPlugin({				
 	      output: {
-	        comments: false,  // remove all comments
+	        comments: false,  // 清楚注释信息
 	      },
 	      compress: {
-	        warnings: false
-	      },
-	      beautify: false, 	//不启用美化功能
-	      comments: false,  //不保留注释
-	      sourceMap: true,  //生成soucemap文件
+	        warnings: false,
+	      }
 	    })
 	]
 }

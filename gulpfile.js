@@ -1,21 +1,20 @@
-var gulp = require('gulp'),
-    autoprefixer = require('gulp-autoprefixer'),
-    cssmin = require('gulp-minify-css'),
-    htmlmin = require('gulp-htmlmin');
+var gulp = require('gulp');
 /**
  * css3前缀自动补全
  */
-gulp.task('default', function(){
-	gulp.src('css/anon/*.css')
-        .pipe(autoprefixer())
-        .pipe(gulp.dest('dist/anon'))
+var autoprefixer = require('gulp-autoprefixer');
+gulp.task('css3', function(){
+	return gulp.src('css/*.css')
+                .pipe(autoprefixer())
+                .pipe(gulp.dest('dist/css'))
 });
 
 /**
  * css压缩
  */
-gulp.task('cssmin', function () {
-    gulp.src('css/*.css')
+var cssmin = require('gulp-minify-css');
+gulp.task('cssmin',['css3'], function () {
+    gulp.src('dist/css/*.css')
         .pipe(cssmin())
         .pipe(gulp.dest('dist/mincss'));
 });
@@ -33,18 +32,38 @@ gulp.task('cssmin', function () {
 /**
  * html压缩
  */
+var htmlmin = require('gulp-htmlmin');
 gulp.task('htmlmin', function () {
 	var options = {
-		collapseWhitespace:true,			//清除空格
-		collapseBooleanAttributes:true,		//省略布尔属性的值
-		removeComments:true,				//清除html中注释的部分
-		removeEmptyAttributes:true,			//清除所有的空属性
-		removeScriptTypeAttributes:true,	//清除所有script标签中的type="text/javascript"属性
-		removeStyleLinkTypeAttributes:true,	//清楚所有Link标签上的type属性。
-		minifyJS:true,						//压缩html中的javascript代码。
-		minifyCSS:true						//压缩html中的css代码。
+		collapseWhitespace:true,			       //清除空格
+		collapseBooleanAttributes:true,		   //省略布尔属性的值
+		removeComments:true,				         //清除html中注释的部分
+		removeEmptyAttributes:true,			     //清除所有的空属性
+		removeScriptTypeAttributes:true,	   //清除所有script标签中的type="text/javascript"属性
+		removeStyleLinkTypeAttributes:true,	 //清楚所有Link标签上的type属性。
+		minifyJS:true,						           //压缩html中的javascript代码。
+		minifyCSS:true						           //压缩html中的css代码。
 	};
     gulp.src('html/*.html')
         .pipe(htmlmin(options))
         .pipe(gulp.dest('dist/minhtml'));
 });
+
+/**
+ * gulp整合webpack插件
+ */
+var webpack = require( 'gulp-webpack');
+var webpack_config = require( './webpack.config');
+gulp.task( 'webpack', ['cssmin'], function(){
+    return gulp.src ( 'app/entry.js' )
+        .pipe( webpack( webpack_config ) )
+        .pipe( gulp.dest( 'dist/js') );
+});
+
+
+gulp.task ( 'watch', function(){
+    gulp.watch ( './**.*', ['cssmin'] );
+});
+
+
+
