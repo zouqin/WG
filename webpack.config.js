@@ -2,20 +2,23 @@ var path = require("path");           //node path 模块
 var webpack = require('webpack');     //webpack   核心模块
 
 var plug = [];                        //插件数组
-var ExtractTextPlugin = require('extract-text-webpack-plugin'); // 提取文件插件
+var ExtractTextPlugin  = require('extract-text-webpack-plugin'); // 提取文件插件
 
-// 压缩js插件
-var UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({       
-        output: {
-          comments: false,  // 清楚注释信息
-        },
-        compress: {
-          warnings: false,
-        }
-      });
+
+var extractSCSS = new ExtractTextPlugin('stylescss.css');
+plug.push( extractSCSS );
+
+/**
+ * 压缩js
+ * @type {Object}
+ */
+var uglify_option = {
+  //清楚注释信息
+  output: { comments: false , },
+  compress : { warnings : false }
+}
+var UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin( uglify_option );
 plug.push( UglifyJsPlugin );
-
-
 
 module.exports = {
   /**
@@ -24,25 +27,63 @@ module.exports = {
    */
   entry: ['./app/entry.js'],
   output: {
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "dist/js"),
     filename: '[name].js'
   },
   module: {
-    loaders: [
-    	  /** 将css文件加载到<style>标签中 **/
-        {test: /\.css$/, loader: 'style'},	
-      
-        /**支持JS中以  requier() 的形式加载 .css文件**/
-        {test: /\.css$/, loader: 'css'},		
-      
-        /**支持JS,CSS中引入图片  limit:属性小于10000字节时采用图片64位编码 **/
-        {test: /\.(png|jpg)$/,loader:'url?limit=1000'},
+    rules: [
+        { 
+          test:/\.css$/,
+          use:[
+            {
+              loader: 'style-loader',
+            },
+
+            {
+              loader: 'css-loader',
+              options : {
+                modules: true
+              }
+            },
+
+            {
+              loader: 'postcss-loader',
+            },
+          ]
+        },	
+
+        {
+          test:/\.scss$/,
+          use:[
+            {
+              loader: 'style-loader',
+            },
+
+            {
+              loader: 'css-loader',
+              options : {
+                modules: true
+              },
+            },
+
+            {
+              loader: 'sass-loader',
+            },
+
+            {
+              loader: 'postcss-loader',
+            },
+          ]
+        },
         
         /**解析 react和 es6 **/
-        {test: /\.js?$/, loader: 'babel', query: { presets: ['es2015', 'react'] } },
+        {
+          test: /\.js$/,
+          loader  : 'babel-loader',
+          options : { presets: [ 'es2015', 'react' ] },
+          exclude : [/node_modules/],
+        },
         
-        /**这里用了样式分离出来的插件，如果不想分离出来，可以直接这样写 loader:'style!css!sass'**/
-        {test: /\.scss$/, loader:'style!css!sass' }
     ]
   },
 
@@ -50,7 +91,7 @@ module.exports = {
    * 配置解析规则
    */
   resolve: {
-      extensions: ['', '.js', '.jsx']
+      extensions: ['.js', '.json', '.jsx','.css']
   },
   
   /**插件**/
