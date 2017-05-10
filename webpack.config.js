@@ -8,28 +8,25 @@ var ExtractTextPlugin  = require('extract-text-webpack-plugin'); // 提取文件
 var extractSCSS = new ExtractTextPlugin('stylescss.css');
 plug.push( extractSCSS );
 
-/**
- * 压缩js
- * @type {Object}
- */
-var uglify_option = {
-  //清楚注释信息
-  output: { comments: false , },
-  compress : { warnings : false }
-}
-var UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin( uglify_option );
-plug.push( UglifyJsPlugin );
-
 module.exports = {
   /**
    * entry:入口文件
    * @type {Array | String | Object}
    */
-  entry: ['./app/entry.js'],
+  entry: [
+    './app/entry.js',
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server'
+  ],
+
   output: {
     path: path.resolve(__dirname, "dist/js"),
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: '/',
   },
+
+
   module: {
     rules: [
         { 
@@ -87,6 +84,19 @@ module.exports = {
     ]
   },
 
+  devtool: 'inline-source-map',
+
+  devServer: {
+    hot: true,
+    // 开启服务器的模块热替换(HMR)
+
+    contentBase: path.resolve(__dirname, 'dist'),
+    // 输出文件的路径
+
+    publicPath: '/'
+    // 和上文 output 的“publicPath”值保持一致
+  },
+
   /**
    * 配置解析规则
    */
@@ -95,5 +105,19 @@ module.exports = {
   },
   
   /**插件**/
-  plugins: plug,
+  plugins: [
+
+    new webpack.optimize.UglifyJsPlugin( {
+      //清楚注释信息
+      output: { comments: false , },
+      compress : { warnings : false }
+    } ),
+
+
+    new webpack.HotModuleReplacementPlugin(),
+    // 开启全局的模块热替换(HMR)
+
+    new webpack.NamedModulesPlugin(),
+    // 当模块热替换(HMR)时在浏览器控制台输出对用户更友好的模块名字信息 
+  ],
 }

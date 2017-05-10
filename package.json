@@ -4,7 +4,7 @@
   "description": "gulp+webpack",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack-dev-server"
   },
   "author": "zou.qin",
   "license": "ISC",
@@ -27,10 +27,12 @@
     "postcss-loader": "^2.0.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-hot-loader": "^3.0.0-beta.7",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.17.0",
     "url-loader": "^0.5.7",
-    "webpack": "^2.5.1"
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
     "node-sass": "^4.5.2"
