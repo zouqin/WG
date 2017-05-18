@@ -9,20 +9,26 @@ var extractSCSS = new ExtractTextPlugin('stylescss.css');
 plug.push( extractSCSS );
 
 module.exports = {
-  /**
-   * entry:入口文件
-   * @type {Array | String | Object}
-   */
+  context: path.resolve( __dirname, 'src' ),
+
   entry: [
-    './app/entry.js',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server'
+     'react-hot-loader/patch',
+    // 开启 React 代码的模块热替换(HMR)
+
+    'webpack-dev-server/client?http://localhost:9000',
+    // 为 webpack-dev-server 的环境打包代码
+    // 然后连接到指定服务器域名与端口
+
+    'webpack/hot/only-dev-server',
+    // 为热替换(HMR)打包好代码
+    // only- 意味着只有成功更新运行代码才会执行热替换(HMR)
+    
+    './index.js',
   ],
 
   output: {
-    path: path.resolve(__dirname, "dist/js"),
-    filename: '[name].js',
+    path: path.resolve(__dirname, "dist"),
+    filename: 'bundle.js',
     publicPath: '/',
   },
 
@@ -87,14 +93,26 @@ module.exports = {
   devtool: 'inline-source-map',
 
   devServer: {
+    // 设置端口
+    port: 9000,
+    
     hot: true,
     // 开启服务器的模块热替换(HMR)
 
     contentBase: path.resolve(__dirname, 'dist'),
     // 输出文件的路径
 
-    publicPath: '/'
+    publicPath: '/',
     // 和上文 output 的“publicPath”值保持一致
+    
+    inline:true,
+
+    watchContentBase: true,
+
+    watchOptions:{
+      poll:true,
+      ignored: /node_modules/,
+    }
   },
 
   /**
@@ -112,7 +130,6 @@ module.exports = {
       output: { comments: false , },
       compress : { warnings : false }
     } ),
-
 
     new webpack.HotModuleReplacementPlugin(),
     // 开启全局的模块热替换(HMR)

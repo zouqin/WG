@@ -4,6 +4,8 @@
   "description": "gulp+webpack",
   "main": "index.js",
   "scripts": {
+    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build",
+    "wds": "webpack-dev-server --open",
     "start": "webpack-dev-server"
   },
   "author": "zou.qin",

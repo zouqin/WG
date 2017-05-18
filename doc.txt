@@ -1,2 +1,46 @@
-css-loader : webpack 加载css文件
-style-loader : webpack 将css文件加载到<style>标签中
+|--@root
+	|--Member //业务模块名
+        |--Conf
+        |--Controller //存放控制器
+        |--Veiw //存放页面
+            |--Basic  //PC终端
+            |--Mobile //手机终端
+                |--Index //控制器名
+                    |--index.php //页面
+    |--dist //存放编译后文件，用于测试
+    |--dev  //存放编译后文件，用于开发
+        |--basic
+        |--mobile
+        	|--images //存放图片
+            |--member //业务模块名
+                |--common.min.css
+                |--index_index.min.css
+                |--index_index.min.js
+                |--index_index.min.css.map //.map为源码映射文件,dist目录下不输出
+                |--index_index.min.js.map
+            |-ensure //异步加载文件
+    |--libs   //第三方插件+
+    |--tmp //存放在页面中使用的图片，一般为可以后台上传的图片,页面调用路径为__PUBLIC__tmp/
+        |--index_index //页面文件夹
+    |--src  //存放源码文件
+        |--basic
+        |--mobile //以mobile目录为例，basic目录同理
+            |--common //存放mobile终端下公用文件
+                |--images    //存放图像文件
+                |--css       //存放css文件
+                |--common.js //js文件直接存放在common文件夹下
+            |--index 
+            |--member //业务模块名
+                |--common//业务公共模块
+                    |--css
+                    |--js
+                    |--index.js
+                |--index_index //命名规范：控制器名_页面名（与HTML文件命名相同）；存放页面私有文件
+                    |--images
+                        |--image.png
+                    |--index.css
+                    |--index.js
+        |--common //跨终端公共组件
+|--package.json
+|--webpack.config.dist.js //配置源文件，复制后重命名为webpack.config.js使用
+|--README.md  //项目介绍
