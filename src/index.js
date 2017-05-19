@@ -2,8 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './components/App';
-// import styles from '../css/style.css';
-// import '../css/test.scss';
+// import './components/App.css';
+import '../css/test.scss';
+// import Moment from 'moment';
+
+var moment = require('moment');
+
+console.log( moment().format() );
 
 const render = ( Component ) => {
 	ReactDOM.render(
