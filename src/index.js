@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import App from './components/App';
+import App from './components/App.js';
 // import './components/App.css';
-import '../css/test.scss';
+// import test from '../css/test.scss';
 // import Moment from 'moment';
 
-var moment = require('moment');
+// var moment = require('moment');
 
-console.log( moment().format() );
+// console.log( moment().format() );
 
 const render = ( Component ) => {
 	ReactDOM.render(
