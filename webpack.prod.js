@@ -61,7 +61,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: '[name].[hash]js',
+    filename: '[name].[hash].js',
     publicPath: './',
   },
 
@@ -69,7 +69,7 @@ module.exports = {
     rules: rules,
   },
 
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   /**
    * 配置解析规则
    */
@@ -80,17 +80,17 @@ module.exports = {
   /**插件**/
   plugins: [
 
-    // new webpack.optimize.UglifyJsPlugin( {
-    //   //清楚注释信息
-    //   output: { comments: false , },
-    //   compress : { warnings : false }
-    // } ),
+    new webpack.optimize.UglifyJsPlugin( {
+      //清楚注释信息
+      output: { comments: false , },
+      compress : { warnings : false }
+    } ),
     
     // css文提取插件
-    new cssExtractText('./css/stylescss.css'),
+    new cssExtractText('css/stylescss.[hash].css'),
     
     // scss文件提取插件
-    new scssExtractText('./scss/style.css'),
+    new scssExtractText('scss/style.[hash].css'),
 
     // 创建公共模块
     new webpack.optimize.CommonsChunkPlugin({
